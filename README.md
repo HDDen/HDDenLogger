@@ -1,0 +1,2 @@
+# HDDenLogger
+My Logger Class
