@@ -10,6 +10,8 @@ class HDDenLogger {
 
     if (!$logfile){
       $this->logfile = dirname(__FILE__).'/_HDDenLog.txt';
+    } else {
+      $this->logfile = $logfile;
     }
 
     $this->logfilePrepare(1000000); // мегабайт
