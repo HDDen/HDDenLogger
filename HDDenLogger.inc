@@ -80,6 +80,12 @@ class HDDenLogger {
     date_default_timezone_set( 'Europe/Moscow' );
     $date = date('d/m/Y H:i:s', time());
 
+    // проверяем путь
+    $log_folder = dirname($this->logfile);
+    if ( !file_exists( $log_folder ) && !is_dir( $log_folder ) ) {
+      mkdir( $log_folder, 0777, true );
+    }
+
     // сохраняем
     file_put_contents($this->logfile, $date.': '.$this->logdata, FILE_APPEND | LOCK_EX);
 
@@ -92,6 +98,7 @@ class HDDenLogger {
    * @param $maxLogSize
    */
   private function logfilePrepare($maxLogSize){
+    clearstatcache();
     if (file_exists($this->logfile)){
       $actualLogSize = filesize($this->logfile);
 
