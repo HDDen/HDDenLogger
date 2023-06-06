@@ -11,7 +11,7 @@ class HDDenLogger {
     if (!$logfile){
       $this->logfile = dirname(__FILE__).'/_HDDenLog.txt';
     } else {
-      $logfile_folder = trim(dirname($logfile), '\/');
+      $logfile_folder = rtrim(dirname($logfile), '\/');
       if ($logfile_folder !== ''){
         if ( !file_exists( $logfile_folder ) || !is_dir( $logfile_folder) ) {
           mkdir($logfile_folder);
