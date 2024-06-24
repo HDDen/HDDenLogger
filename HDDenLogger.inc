@@ -111,18 +111,18 @@ class HDDenLogger {
 
       // если размер превышен
       if ($actualLogSize >= $maxLogSize){
-        $date = date('d-m-Y_H-i-s', time());
+        $date = date('Y-m-d_H-i-s', time());
 
         $zipped = false;
         if (class_exists('ZipArchive')){
-          $zip_file = dirname($this->logfile).'/_log_'.$date.'.zip';
+          $zip_file = dirname($this->logfile).'/_log-'.$_SERVER['HTTP_HOST'].'_'.$date.'.zip';
           $zip = new \ZipArchive;
 
           if ($zip->open($zip_file, ZIPARCHIVE::CREATE)!==TRUE)
           {
             exit("cannot open <$zip_file>\n");
           }
-          $zip->addFile($this->logfile,'log.txt');
+          $zip->addFile($this->logfile,'log-'.$_SERVER['HTTP_HOST'].'_'.$date.'.txt');
           $zip->close();
           $zipped = true;
         }
