@@ -132,7 +132,7 @@ class HDDenLogger {
         if ( !$zipped ){
 
           $bkp_to = dirname($this->logfile);
-          $bkp_name = '_log_'.$date.'.tar.gz';
+          $bkp_name = '_log-'.$_SERVER['HTTP_HOST'].'_'.$date.'.tar.gz';
 
           $toarchive = shell_exec('tar -zcvf '.$bkp_to.'/'.$bkp_name.' '.$this->logfile.' ');
           //$toarchive = shell_exec('tar -zcvf file.tar.gz /path/to/filename ');
