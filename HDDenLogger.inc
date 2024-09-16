@@ -5,11 +5,19 @@ class HDDenLogger {
 
   public $logdata;
   private $logfile;
+  private $protect_by_php;
 
-  public function __construct($logfile = false) {
+  public function __construct($logfile = false, $protect = true) {
 
     if (!$logfile){
-      $this->logfile = dirname(__FILE__).'/_HDDenLog.txt';
+      if ($protect){
+        $this->protect_by_php = true;
+        $this->logfile = dirname(__FILE__).'/_HDDenLog.txt.php';
+      } else {
+        $this->protect_by_php = false;
+        $this->logfile = dirname(__FILE__).'/_HDDenLog.txt';
+      }
+      
     } else {
       $logfile_folder = rtrim(dirname($logfile), '\/');
       if ($logfile_folder !== ''){
@@ -101,7 +109,7 @@ class HDDenLogger {
   }
 
   /**
-   * Проверяет размер файла лога, запаковывает при превышении переданного лимита
+   * Проверяет размер файла лога, запаковывает при превышении переданного лимита, защищает если новый
    * @param $maxLogSize
    */
   private function logfilePrepare($maxLogSize){
@@ -146,8 +154,11 @@ class HDDenLogger {
 
         if ( $zipped || $gzipped ){
           unlink($this->logfile);
+          file_put_contents($this->logfile, '<?php die(); /*'.PHP_EOL, LOCK_EX);
         }
       }
+    } elseif ($this->protect_by_php) {
+      file_put_contents($this->logfile, '<?php die(); /*'.PHP_EOL, LOCK_EX);
     }
 
   }
