@@ -19,6 +19,11 @@ class HDDenLogger {
       }
       
     } else {
+      if ($protect){
+        $this->protect_by_php = true;
+      } else {
+        $this->protect_by_php = false;
+      }
       $logfile_folder = rtrim(dirname($logfile), '\/');
       if ($logfile_folder !== ''){
         if ( !file_exists( $logfile_folder ) || !is_dir( $logfile_folder) ) {
