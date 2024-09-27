@@ -6,8 +6,9 @@ class HDDenLogger {
   public $logdata;
   private $logfile;
   private $protect_by_php;
+  private $old_logs_location;
 
-  public function __construct($logfile = false, $protect = true) {
+  public function __construct($logfile = false, $protect = true, $old_logs_location = false) {
 
     if (!$logfile){
       if ($protect){
@@ -32,6 +33,12 @@ class HDDenLogger {
       }
 
       $this->logfile = $logfile;
+    }
+
+    if ($old_logs_location && is_writable(dirname($old_logs_location))){
+      $this->old_logs_location = $old_logs_location;
+    } else {
+      $this->old_logs_location = dirname($this->logfile);
     }
 
     $this->logfilePrepare(1000000); // мегабайт
@@ -128,7 +135,7 @@ class HDDenLogger {
 
         $zipped = false;
         if (class_exists('ZipArchive')){
-          $zip_file = dirname($this->logfile).'/_log-'.$_SERVER['HTTP_HOST'].'_'.$date.'.zip';
+          $zip_file = $this->old_logs_location.'/_log-'.$_SERVER['HTTP_HOST'].'_'.$date.'.zip';
           $zip = new \ZipArchive;
 
           if ($zip->open($zip_file, ZIPARCHIVE::CREATE)!==TRUE)
@@ -144,7 +151,7 @@ class HDDenLogger {
         $gzipped = false;
         if ( !$zipped ){
 
-          $bkp_to = dirname($this->logfile);
+          $bkp_to = $this->old_logs_location;
           $bkp_name = '_log-'.$_SERVER['HTTP_HOST'].'_'.$date.'.tar.gz';
 
           $toarchive = shell_exec('tar -zcvf '.$bkp_to.'/'.$bkp_name.' '.$this->logfile.' ');
