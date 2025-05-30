@@ -126,6 +126,8 @@ class HDDenLogger {
    */
   private function logfilePrepare($maxLogSize){
     clearstatcache();
+    $server_fallback = (!empty($_SERVER['HTTP_HOST'])) ? $_SERVER['HTTP_HOST'] : 'cli';
+
     if (file_exists($this->logfile)){
       $actualLogSize = filesize($this->logfile);
 
@@ -135,14 +137,14 @@ class HDDenLogger {
 
         $zipped = false;
         if (class_exists('ZipArchive')){
-          $zip_file = $this->old_logs_location.'/_log-'.$_SERVER['HTTP_HOST'].'_'.$date.'.zip';
+          $zip_file = $this->old_logs_location.'/_log-'.$server_fallback.'_'.$date.'.zip';
           $zip = new \ZipArchive;
 
           if ($zip->open($zip_file, ZIPARCHIVE::CREATE)!==TRUE)
           {
             exit("cannot open <$zip_file>\n");
           }
-          $zip->addFile($this->logfile,'log-'.$_SERVER['HTTP_HOST'].'_'.$date.'.txt');
+          $zip->addFile($this->logfile,'log-'.$server_fallback.'_'.$date.'.txt');
           $zip->close();
           $zipped = true;
         }
@@ -152,7 +154,7 @@ class HDDenLogger {
         if ( !$zipped ){
 
           $bkp_to = $this->old_logs_location;
-          $bkp_name = '_log-'.$_SERVER['HTTP_HOST'].'_'.$date.'.tar.gz';
+          $bkp_name = '_log-'.$server_fallback.'_'.$date.'.tar.gz';
 
           $toarchive = shell_exec('tar -zcvf '.$bkp_to.'/'.$bkp_name.' '.$this->logfile.' ');
           //$toarchive = shell_exec('tar -zcvf file.tar.gz /path/to/filename ');
