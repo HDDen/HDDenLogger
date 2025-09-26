@@ -1,6 +1,6 @@
 <?php
 /**
- * 1.2.0
+ * 1.2.1
  */
 use \ZipArchive as ZipArchive;
 
@@ -181,5 +181,5 @@ if (!class_exists('HDDenLogger')){
       }
   
     }
-}
+  }
 }
