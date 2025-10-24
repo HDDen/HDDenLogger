@@ -1,10 +1,10 @@
 <?php
 /**
- * 1.2.1
+ * 1.2.2
  */
 use \ZipArchive as ZipArchive;
 
-if (!class_exists('HDDenLogger')){
+if (!class_exists(__NAMESPACE__.'\HDDenLogger', false)){
   class HDDenLogger {
 
     public $logdata;
